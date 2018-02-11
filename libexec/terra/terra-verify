@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+### terra-verify -- verify signed message
+### Usage: terra verify <hash> <address> <price> <timestamp>
+### fails if <address> did not sign <hash> with <price> and <timestamp>
+
+price=$(setzer price eth)
+timestamp=$(date +%s)
+
+echo "$price"
+echo "$timestamp"
+
+hash=$(terra pack "$(seth --to-wei "$price" eth)" "$timestamp")
+
+echo "$hash"
+
+from=0x00DaA9a2D88BEd5a29A6ca93e0B7d860cd1d403F
+pass=~/.ssh/pass
+
+ethsign msg --from "$from" --data "$hash" --passphrase-file "$pass"

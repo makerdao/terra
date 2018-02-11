@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+### terra-bot -- run the price feed bot
+### Usage: terra bot --api-key <KEY>
+### Main price bot
+### Needs --api-key <KEY>
+
+set -e
+
+[[ $API_KEY ]] || terra --bad-usage "$0"
+
+price=$(setzer price eth)
+timestamp=$(date +%s)
+
+hash=$(terra pack "$(seth --to-wei "$price" eth)" "$timestamp")
+
+ethsign msg --from "$ETH_FROM" --data "$hash" --passphrase-file "$ETH_PASSWORD"

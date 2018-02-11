@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+### terra -- feedbot and tools
+### Usage: terra [<options>] <command> [<args>]
+###    or: terra <command> --help
+###
+### Feedbot and tools
+###
+### Bot options:
+###
+###    --api-key=<key>            key needed for participating in network
+
+OPTS="terra [<options>] <command> [<args>]
+terra <command> --help
+--
+  Bot options:
+api-key=key          key needed for participating in network
+"
+
+set -e
+
+if ! [[ $TERRA_INIT ]]; then
+  export TERRA_INIT=1
+  [[ -e ~/.terrarc ]] && . ~/.terrarc
+  [[ $(pwd) != ~ && -e .terrarc ]] && . .terrarc
+fi
+
+if [[ $2 = --help ]]; then
+  exec "${0##*/}" help -- "$1"
+elif [[ $1 = -* ]] && which "${0##*/}-$1" &>/dev/null; then
+  exec "${0##*/}-$1" "${@:2}"
+fi
+
+eval "$(git rev-parse --parseopt -- "$@" <<<"$OPTS" || echo exit $?)"
+
+while [[ $1 ]]; do
+  case $1 in
+    --)              shift; break;;
+
+    --api-key)       shift; export TERRA_API_KEY=$1;;
+
+    *) printf "${0##*/}: internal error: %q\n" "$1"; exit 1
+  esac; shift
+done
+
+"${0##*/}-${1-help}" "${@:2}"

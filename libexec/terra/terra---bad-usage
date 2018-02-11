@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+basename=${1##*/}
+terra >&2 "${basename#terra-}" --help
+exit 1
