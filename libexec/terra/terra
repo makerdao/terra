@@ -8,19 +8,27 @@
 ### Bot options:
 ###
 ###    --api-key=<key>            key needed for participating in network
+###    -F, --from=<address>       address used for signing
+###    --keystore=<dir>           local keystore directory
+###    -S, --password=<file>      password for non-interactive signing
 
 OPTS="terra [<options>] <command> [<args>]
 terra <command> --help
 --
   Bot options:
 api-key=key          key needed for participating in network
+F,from=address       address used for signing
+keystore=dir         local keystore directory
+S,password=file      password for non-interactive signing
 "
 
 set -e
 
 if ! [[ $TERRA_INIT ]]; then
   export TERRA_INIT=1
+  # shellcheck source=/dev/null
   [[ -e ~/.terrarc ]] && . ~/.terrarc
+  # shellcheck source=/dev/null
   [[ $(pwd) != ~ && -e .terrarc ]] && . .terrarc
 fi
 
@@ -37,8 +45,12 @@ while [[ $1 ]]; do
     --)              shift; break;;
 
     --api-key)       shift; export TERRA_API_KEY=$1;;
+    -F|--from)       shift; export ETH_FROM=$1;;
 
-    *) printf "${0##*/}: internal error: %q\n" "$1"; exit 1
+    --keystore)      shift; export ETH_KEYSTORE=$1;;
+    -S|--password)   shift; export ETH_PASSWORD=$1;;
+
+    *) printf "${0##*/}: internal error: %q\\n" "$1"; exit 1
   esac; shift
 done
 

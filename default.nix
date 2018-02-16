@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildPhase = "true";
   makeFlags = ["prefix=$(out)"];
   postInstall = let path = lib.makeBinPath [
-    seth curl jshon bc gnused which perl datamash
+    seth curl jshon bc gnused which perl setzer
   ]; in ''
     wrapProgram "$out/bin/terra" --prefix PATH : "${path}"
   '';

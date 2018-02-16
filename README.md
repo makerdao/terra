@@ -4,4 +4,6 @@ Clone repo
 
 `npm install` for additional packages
 
-`terra bot --api-key [KEY]` to start bot
+Requires `seth` and `setzer`.
+
+`terra bot --api-key [KEY] --from [account] --keystore [path] --password [path]` to start bot

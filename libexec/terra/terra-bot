@@ -6,11 +6,16 @@
 
 set -e
 
-[[ $API_KEY ]] || terra --bad-usage "$0"
+[[ $TERRA_API_KEY && $ETH_FROM ]] || terra --bad-usage "$0"
+
+ETH_FROM=$(seth --to-address "$ETH_FROM")
 
 price=$(setzer price eth)
 timestamp=$(date +%s)
 
 hash=$(terra pack "$(seth --to-wei "$price" eth)" "$timestamp")
 
-ethsign msg --from "$ETH_FROM" --data "$hash" --passphrase-file "$ETH_PASSWORD"
+sig=$(ethsign msg --from "$ETH_FROM" --data "$hash" --passphrase-file "$ETH_PASSWORD")
+
+printf "\\n"
+echo "$sig"
