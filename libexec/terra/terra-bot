@@ -14,8 +14,8 @@ price=$(setzer price eth)
 timestamp=$(date +%s)
 
 hash=$(terra pack "$(seth --to-wei "$price" eth)" "$timestamp")
+echo "$hash"
 
 sig=$(ethsign msg --from "$ETH_FROM" --data "$hash" --passphrase-file "$ETH_PASSWORD")
-
 printf "\\n"
 echo "$sig"

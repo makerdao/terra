@@ -11,6 +11,9 @@
 ###    -F, --from=<address>       address used for signing
 ###    --keystore=<dir>           local keystore directory
 ###    -S, --password=<file>      password for non-interactive signing
+###
+### Misc options:
+###    --verbose                  additional verbose output
 
 OPTS="terra [<options>] <command> [<args>]
 terra <command> --help
@@ -20,6 +23,8 @@ api-key=key          key needed for participating in network
 F,from=address       address used for signing
 keystore=dir         local keystore directory
 S,password=file      password for non-interactive signing
+  Misc options:
+verbose              additional verbose output
 "
 
 set -e
@@ -45,10 +50,12 @@ while [[ $1 ]]; do
     --)              shift; break;;
 
     --api-key)       shift; export TERRA_API_KEY=$1;;
-    -F|--from)       shift; export ETH_FROM=$1;;
+    -F|--from)       shift; from=$(seth --to-address "$1"); export ETH_FROM=$from;;
 
     --keystore)      shift; export ETH_KEYSTORE=$1;;
     -S|--password)   shift; export ETH_PASSWORD=$1;;
+
+    --verbose)       export TERRA_VERBOSE=yes;;
 
     *) printf "${0##*/}: internal error: %q\\n" "$1"; exit 1
   esac; shift
