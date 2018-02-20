@@ -11,11 +11,13 @@ set -e
 ETH_FROM=$(seth --to-address "$ETH_FROM")
 
 price=$(setzer price eth)
-timestamp=$(date +%s)
+now=$(date +%s)
 
-hash=$(terra pack "$(seth --to-wei "$price" eth)" "$timestamp")
-echo "$hash"
+hash=$(terra pack "$(seth --to-wei "$price" eth)" "$now")
+echo >&2 "Price: $price"
+echo >&2 "Now:   $now"
+echo >&2 "Hash:  $hash"
 
-sig=$(ethsign msg --from "$ETH_FROM" --data "$hash" --passphrase-file "$ETH_PASSWORD")
+sig=$(ethsign msg --from "$ETH_FROM" --data "$hash")
 printf "\\n"
 echo "$sig"

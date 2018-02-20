@@ -8,9 +8,9 @@ var key = process.env.TERRA_API_KEY || null
 var from = process.env.ETH_FROM || null;
 var sig = process.argv[2] || null;
 var price = process.argv[3] || null;
-var timestamp = process.argv[4] || null;
+var now = process.argv[4] || null;
 
-if (!key || !from || !sig || !price || !timestamp) {
+if (!key || !from || !sig || !price || !now) {
   try {
     require('child_process').execSync('terra --bad-usage ' + process.argv[1])
   } catch(e) {
@@ -27,8 +27,8 @@ user.addActivity({
   verb: 'post',
   data: {
     from: from,
-    sig: sig,
     price: price,
-    timestamp: timestamp
+    now: now,
+    sig: sig
   }
 })
