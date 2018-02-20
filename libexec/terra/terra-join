@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+### terra-join -- get API key to join oracle network
+### Usage: terra join <address>
+
+set -e
+
+[[ $1 ]] || terra --bad-usage "$0"
+
+address=$(seth --to-address "$1")
+
+key=$(curl -sS -d "address=$address" -X POST "https://dai-service.makerdao.com/token")
+
+[[ ${#key} = 27 ]] || { echo "Something went wrong. Could not get API key."; exit 1; }
+
+echo "$key"
