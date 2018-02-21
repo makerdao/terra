@@ -6,18 +6,39 @@
 
 set -e
 
-[[ $TERRA_API_KEY && $ETH_FROM ]] || terra --bad-usage "$0"
+export ETH_RPC_URL=https://mainnet.infura.io
 
+[[ $ETH_FROM ]] || terra --bad-usage "$0"
 ETH_FROM=$(seth --to-address "$ETH_FROM")
 
-price=$(setzer price eth)
-now=$(date +%s)
+if ! [[ $TERRA_API_KEY ]]; then
+  echo >&2 "Generating API key for $ETH_FROM"
+  key=$(terra join "$ETH_FROM")
+  export TERRA_API_KEY=$key
+  echo >&2 "Key: $key"
+fi
 
-hash=$(terra pack "$(seth --to-wei "$price" eth)" "$now")
-echo >&2 "Price: $price"
-echo >&2 "Now:   $now"
-echo >&2 "Hash:  $hash"
+function feed {
+  price=$(setzer price "$1")
+  now=$(date +%s)
 
-sig=$(ethsign msg --from "$ETH_FROM" --data "$hash")
-printf "\\n"
-echo "$sig"
+  hash=$(terra pack "$(seth --to-wei "$price" eth)" "$now")
+  echo >&2 "Pair:  $1_usd"
+  echo >&2 "Price: $price"
+  echo >&2 "Now:   $now"
+  echo >&2 "Hash:  $hash"
+
+  sig=$(ethsign msg --from "$ETH_FROM" --data "$hash" --passphrase-file "$ETH_PASSWORD")
+
+  echo >&2 "Sig:   $sig"
+  echo >&2 ""
+
+  terra send "$sig" "$price" "$now" "$1_usd"
+}
+
+while true; do
+  feed eth
+  feed mkr
+  echo "Waiting 60 seconds"
+  sleep 60
+done
