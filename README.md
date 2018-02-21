@@ -1,9 +1,11 @@
 # Terra
 
-Clone repo
+Clone repo with `git clone https://github.com/makerdao/terra.git`
+
+`cd terra`
 
 `npm install` for additional packages
 
-Requires `seth` and `setzer`.
+Requires `seth`, `setzer` and `ethsign`
 
-`terra bot --api-key [KEY] --from [account] --keystore [path] --password [path]` to start bot
+`terra bot --from [account] --keystore [path] --password [path]` to start bot
