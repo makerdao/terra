@@ -14,8 +14,8 @@ hash=$(seth keccak "$now")
 echo >&2 "Sending hashed message"
 sig=$(ethsign msg --from "$ETH_FROM" --data "$hash" --passphrase-file "$ETH_PASSWORD")
 
-# key=$(curl -sS -d "address=$address&now=$now&sig=$sig" -X POST "https://dai-service.makerdao.com/token")
-key=$(curl -sS -d "address=$address&now=$now&sig=$sig" -X POST "http://localhost:3000/token")
+key=$(curl -sS -d "address=$address&now=$now&sig=$sig" -X POST "https://dai-service.makerdao.com/token")
+# key=$(curl -sS -d "address=$address&now=$now&sig=$sig" -X POST "http://localhost:3000/token")
 
 [[ ${#key} = 27 ]] || { echo >&2 "Something went wrong. Could not get API key."; exit 1; }
 
