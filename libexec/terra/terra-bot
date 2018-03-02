@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 ### terra-bot -- run the price feed bot
-### Usage: terra bot --api-key <KEY>
+### Usage: terra bot --from <ACCOUNT> --api-key <KEY>
 ### Main price bot
-### Needs --api-key <KEY>
+### Needs --api-key <KEY>, will try to generate one automatically
 
 set -e
 
@@ -10,6 +10,8 @@ export ETH_RPC_URL=https://mainnet.infura.io
 
 [[ $ETH_FROM ]] || terra --bad-usage "$0"
 ETH_FROM=$(seth --to-address "$ETH_FROM")
+
+loop=${TERRA_LOOP:-300}
 
 if ! [[ $TERRA_API_KEY ]]; then
   echo >&2 "Generating API key for $ETH_FROM"
@@ -39,6 +41,6 @@ function feed {
 while true; do
   feed eth
   feed mkr
-  echo "Waiting 60 seconds"
-  sleep 60
+  echo "Waiting $loop seconds"
+  sleep "$loop"
 done

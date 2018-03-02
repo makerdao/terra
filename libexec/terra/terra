@@ -11,6 +11,7 @@
 ###    -F, --from=<address>       address used for signing
 ###    --keystore=<dir>           local keystore directory
 ###    -S, --password=<file>      password for non-interactive signing
+###    -L, --loop=<seconds>       wait time in seconds before looping
 ###
 ### Misc options:
 ###    --verbose                  additional verbose output
@@ -23,6 +24,7 @@ api-key=key          key needed for participating in network
 F,from=address       address used for signing
 keystore=dir         local keystore directory
 S,password=file      password for non-interactive signing
+L,loop=seconds       wait time in seconds before looping
   Misc options:
 verbose              additional verbose output
 "
@@ -54,6 +56,8 @@ while [[ $1 ]]; do
 
     --keystore)      shift; export ETH_KEYSTORE=$1;;
     -S|--password)   shift; export ETH_PASSWORD=$1;;
+
+    -L|--loop)       shift; export TERRA_LOOP=$1;;
 
     --verbose)       export TERRA_VERBOSE=yes;;
 
