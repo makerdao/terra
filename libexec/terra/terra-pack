@@ -1,24 +1,12 @@
-#!/usr/bin/env node
-/*
+#!/usr/bin/env bash
 ### terra-pack -- return hash of <price> (wei) and <timestamp> (seconds)
 ### Usage: terra pack <price> <timestamp>
 ### price must be in wei, timestamp in seconds
 ### example: terra pack 1500000000000000000000 1518296924
-*/
 
-if (!process.argv[2] || !process.argv[3]) {
-  try {
-    require('child_process').execSync('terra --bad-usage ' + process.argv[1])
-  } catch(e) {
-    process.exit(1)
-  }
-}
+[[ $# = 2 ]] || terra --bad-usage "$0"
 
-var price = process.argv[2]
-var ts = process.argv[3]
+wad=$(seth --to-word "$1")
+zzz=$(seth --to-word "$2")
 
-var util = require('ethereumjs-util')
-var abi  = require('ethereumjs-abi')
-
-var hash = abi.soliditySHA3(["uint","uint"], [new util.BN(price), ts])
-console.log(hash.toString('hex'))
+seth keccak 0x"$wad$zzz"

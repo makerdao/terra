@@ -14,25 +14,7 @@ Clone repo `git clone https://github.com/makerdao/terra.git`
 
 ## Dependencies
 
-Requires `seth`, `setzer` and `ethsign`.
-
-Using the `nix` package manager (v2.0 or above):
-
-`curl https://nixos.org/nix/install | sh`
-
-`nix-channel --add https://nix.dapphub.com/pkgs/dapphub`
-
-`nix-channel --update`
-
-`nix-env -iA dapphub.{seth,ethsign,jshon}`
-
-To install `setzer`:
-
-`git clone https://github.com/makerdao/setzer`
-
-`cd setzer`
-
-`make link` or `sudo make link`
+`curl https://dapp.tools/install | sh`
 
 ## Preparing terra
 
